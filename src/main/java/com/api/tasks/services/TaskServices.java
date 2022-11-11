@@ -21,8 +21,11 @@ public class TaskServices {
 	}
 
 	public Task findById(Integer id) {
-		Optional<Task> obj = taskRepository.findById(id);
-		return obj.get();
+		Optional<Task> objTask = taskRepository.findById(id);
+		return objTask.get();
 	}
 
+	public Task insert(Task objTask) {
+		return taskRepository.save(objTask);
+	}
 }
