@@ -15,17 +15,29 @@ public class TaskServices {
 	@Autowired
 	private TaskRepository taskRepository;
 
-	public List<Task> findAll() {
+	public List<Task> findAllTasks() {
 
 		return taskRepository.findAll();
 	}
 
-	public Task findById(Integer id) {
+	public Task findTaskById(Integer id) {
 		Optional<Task> objTask = taskRepository.findById(id);
 		return objTask.get();
 	}
 
-	public Task insert(Task objTask) {
+	public Task insertTask(Task objTask) {
 		return taskRepository.save(objTask);
+	}
+
+	public Task changeTask(Task objTask) {
+
+		Task temp = new Task();
+
+		// taskRepository.findById(objTask.getId();
+		return temp;
+	}
+
+	public void deleteTask(Integer id) {
+		taskRepository.deleteById(id);
 	}
 }
