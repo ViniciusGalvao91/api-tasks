@@ -29,12 +29,20 @@ public class TaskServices {
 		return taskRepository.save(objTask);
 	}
 
-	public Task changeTask(Task objTask) {
+	public Task updateTask(Integer id, Task objTask) {
 
-		Task temp = new Task();
+		Task entity = taskRepository.getReferenceById(id);
+		updateData(entity, objTask);
+		return taskRepository.save(entity);
+	}
 
-		// taskRepository.findById(objTask.getId();
-		return temp;
+	private void updateData(Task entity, Task objTask) {
+		
+		entity.setTitle(objTask.getTitle());
+		entity.setDescription(objTask.getDescription());
+		entity.setDate(objTask.getDate());
+		entity.setTime(objTask.getTime());
+		entity.setState(objTask.getState());		
 	}
 
 	public void deleteTask(Integer id) {
