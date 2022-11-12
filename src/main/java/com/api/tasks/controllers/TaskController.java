@@ -1,12 +1,15 @@
 package com.api.tasks.controllers;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -32,14 +35,13 @@ public class TaskController {
 	private TaskService taskservices;
 
 	@GetMapping
-	public ResponseEntity<List<TaskModel>> getAllTasks() {
-		List<TaskModel> listAllTasks = taskservices.findAllTasks();
-		return ResponseEntity.status(HttpStatus.OK).body(listAllTasks);
+	public ResponseEntity<Page<TaskModel>> getAllTasks(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+		return ResponseEntity.status(HttpStatus.OK).body(taskservices.findAll(pageable));
 	}
 
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<Object> getOneTask(@PathVariable String id) {
-		Optional<TaskModel> taskModelOptional = taskservices.findTaskById(id);
+		Optional<TaskModel> taskModelOptional = taskservices.findById(id);
 		if (!taskModelOptional.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tarefa não encontrada.");
 		}
@@ -56,7 +58,7 @@ public class TaskController {
 
 	@PutMapping(path = "/{id}")
 	public ResponseEntity<Object> updateTask(@PathVariable String id, @RequestBody @Valid TaskDto taskDto) {
-		Optional<TaskModel> taskModelOptional = taskservices.findTaskById(id);
+		Optional<TaskModel> taskModelOptional = taskservices.findById(id);
 		if (!taskModelOptional.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tarefa não encontrada.");
 		}
@@ -67,16 +69,16 @@ public class TaskController {
 
 	@PutMapping(path = "/state/{id}")
 	public ResponseEntity<TaskModel> updateState(@PathVariable String id, @RequestBody TaskModel objTask) {
-		return ResponseEntity.status(HttpStatus.OK).body(taskservices.updateTask(id, objTask));
+		return ResponseEntity.status(HttpStatus.OK).body(taskservices.update(id, objTask));
 	}
 
 	@DeleteMapping(path = "/{id}")
 	public ResponseEntity<Object> deleteTask(@PathVariable String id) {
-		Optional<TaskModel> taskModelOptional = taskservices.findTaskById(id);
+		Optional<TaskModel> taskModelOptional = taskservices.findById(id);
 		if (!taskModelOptional.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tarefa não encontrada.");
 		}
-		taskservices.deleteTask(taskModelOptional.get());
+		taskservices.delete(taskModelOptional.get());
 		return ResponseEntity.status(HttpStatus.OK).body("Tarefa deletada com sucesso!");
 	}
 
