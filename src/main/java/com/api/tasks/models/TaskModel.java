@@ -1,31 +1,45 @@
-package com.api.tasks.entitys;
+package com.api.tasks.models;
 
 import java.io.Serializable;
+import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 
 @Entity
-public class Task implements Serializable {
+@Table(name = "TB_TASKS")
+public class TaskModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private UUID id;
+	
+	@Column(nullable = false, unique = false, length = 100)
 	private String title;
-	private String description;
-	private String date;
-	private String time;
-	private Integer state;
 
-	public Task() {
+	@Column(nullable = true, unique = false, length = 360)
+	private String description;
+
+	@Column(nullable = false, unique = false, length = 20)
+	private String date;
+
+	@Column(nullable = true, unique = false, length = 10)
+	private String time;
+
+	@Column(nullable = false, unique = false)
+	private boolean state;
+
+	public TaskModel() {
 
 	}
 
-	public Task(Integer id, String title, String description, String date, String time, Integer state) {
+	public TaskModel(UUID id, String title, String description, String date, String time, boolean state) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -35,11 +49,11 @@ public class Task implements Serializable {
 		this.state = state;
 	}
 
-	public Integer getId() {
+	public UUID getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(UUID id) {
 		this.id = id;
 	}
 
@@ -75,11 +89,11 @@ public class Task implements Serializable {
 		this.time = time;
 	}
 
-	public Integer getState() {
+	public boolean getState() {
 		return state;
 	}
 
-	public void setState(Integer state) {
+	public void setState(boolean state) {
 		this.state = state;
 	}
 }
