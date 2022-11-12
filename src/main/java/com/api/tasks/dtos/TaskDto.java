@@ -1,7 +1,6 @@
 package com.api.tasks.dtos;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 
 
@@ -19,8 +18,7 @@ public class TaskDto {
 	@Size(max = 10)
 	private String date;
 
-	@Null
-	@Size(max = 5)
+
 	private String time;
 
 	

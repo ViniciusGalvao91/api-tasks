@@ -5,8 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.api.tasks.models.TaskModel;
 
-import java.util.UUID;
-
 @Repository
-public interface TaskRepository extends JpaRepository<TaskModel, UUID> {
+public interface TaskRepository extends JpaRepository<TaskModel, String> {
 }

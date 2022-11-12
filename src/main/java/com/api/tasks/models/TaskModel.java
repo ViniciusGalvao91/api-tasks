@@ -1,14 +1,14 @@
 package com.api.tasks.models;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 
 @Entity
@@ -17,8 +17,9 @@ public class TaskModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private UUID id;
+	@GeneratedValue(generator="uuid")
+	@GenericGenerator(name="uuid", strategy = "uuid2")
+	private String id;
 	
 	@Column(nullable = false, unique = false, length = 100)
 	private String title;
@@ -38,8 +39,9 @@ public class TaskModel implements Serializable {
 	public TaskModel() {
 
 	}
+	
 
-	public TaskModel(UUID id, String title, String description, String date, String time, boolean state) {
+	public TaskModel(String id, String title, String description, String date, String time, boolean state) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -49,11 +51,11 @@ public class TaskModel implements Serializable {
 		this.state = state;
 	}
 
-	public UUID getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

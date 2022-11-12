@@ -2,7 +2,8 @@ package com.api.tasks.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,20 +18,19 @@ public class TaskService {
 	private TaskRepository taskRepository;
 
 	public List<TaskModel> findAllTasks() {
-
 		return taskRepository.findAll();
 	}
 
-	public TaskModel findTaskById(UUID id) {
-		Optional<TaskModel> objTask = taskRepository.findById(id);
-		return objTask.get();
+	public Optional<TaskModel> findTaskById(String id) {		
+		return taskRepository.findById(id);
 	}
 
-	public TaskModel insertTask(TaskModel objTask) {
+	@Transactional
+	public TaskModel save(TaskModel objTask) {
 		return taskRepository.save(objTask);
 	}
 
-	public TaskModel updateTask(UUID id, TaskModel objTask) {
+	public TaskModel updateTask(String id, TaskModel objTask) {
 
 		TaskModel taskEntity = taskRepository.getReferenceById(id);
 		updateData(taskEntity, objTask);
@@ -46,7 +46,8 @@ public class TaskService {
 		entity.setState(objTask.getState());
 	}
 
-	public void deleteTask(UUID id) {
-		taskRepository.deleteById(id);
+	@Transactional
+	public void deleteTask(TaskModel taskModel) {
+		taskRepository.delete(taskModel);
 	}
 }
