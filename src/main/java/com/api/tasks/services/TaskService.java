@@ -1,5 +1,7 @@
 package com.api.tasks.services;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -51,4 +53,27 @@ public class TaskService {
 	public void delete(TaskModel taskModel) {
 		taskRepository.delete(taskModel);
 	}
+	
+	public LocalDate stringToLocalDate (String date) {
+		
+		 DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		 return LocalDate.parse(date, formatDate);
+		  
+	}
+	
+	public String dateToString (LocalDate date) {
+		
+		 DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		 return date.format(formatDate);		  
+	}
 }
+
+
+
+
+
+
+
+
+
+

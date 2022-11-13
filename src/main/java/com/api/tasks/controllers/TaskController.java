@@ -45,14 +45,18 @@ public class TaskController {
 		if (!taskModelOptional.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tarefa não encontrada.");
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(taskModelOptional.get());
+	
+		taskModelOptional.ifPresent(date -> taskservices.dateToString(taskModelOptional.get().getDate()));
+		return ResponseEntity.status(HttpStatus.OK).body(taskModelOptional.get().getDate());
 	}
 
 	@PostMapping
 	public ResponseEntity<TaskModel> saveTask(@RequestBody @Valid TaskDto taskDto) {
 		var taskModel = new TaskModel();
 		BeanUtils.copyProperties(taskDto, taskModel);
+		taskModel.setDate(taskservices.stringToLocalDate(taskDto.getDate()));
 		taskModel.setState(false);
+		
 		return ResponseEntity.status(HttpStatus.CREATED).body(taskservices.save(taskModel));
 	}
 

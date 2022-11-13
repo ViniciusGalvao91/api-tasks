@@ -1,8 +1,9 @@
 package com.api.tasks.dtos;
 
+import java.time.LocalTime;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
 
 public class TaskDto {
 
@@ -18,10 +19,8 @@ public class TaskDto {
 	@Size(max = 10)
 	private String date;
 
+	private LocalTime time;
 
-	private String time;
-
-	
 	public String getTitle() {
 		return title;
 	}
@@ -46,13 +45,12 @@ public class TaskDto {
 		this.date = date;
 	}
 
-	public String getTime() {
+	public LocalTime getTime() {
 		return time;
 	}
 
-	public void setTime(String time) {
+	public void setTime(LocalTime time) {
 		this.time = time;
 	}
 
-	
 }

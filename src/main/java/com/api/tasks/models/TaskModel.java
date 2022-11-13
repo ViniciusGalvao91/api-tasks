@@ -1,12 +1,15 @@
 package com.api.tasks.models;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.FutureOrPresent;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -26,12 +29,13 @@ public class TaskModel implements Serializable {
 
 	@Column(nullable = true, unique = false, length = 360)
 	private String description;
-
+	
+	@FutureOrPresent
 	@Column(nullable = false, unique = false, length = 20)
-	private String date;
+	private LocalDate date;
 
 	@Column(nullable = true, unique = false, length = 10)
-	private String time;
+	private LocalTime time;
 
 	@Column(nullable = false, unique = false)
 	private boolean state;
@@ -41,7 +45,7 @@ public class TaskModel implements Serializable {
 	}
 	
 
-	public TaskModel(String id, String title, String description, String date, String time, boolean state) {
+	public TaskModel(String id, String title, String description, LocalDate date, LocalTime time, boolean state) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -75,19 +79,19 @@ public class TaskModel implements Serializable {
 		this.description = description;
 	}
 
-	public String getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 
-	public String getTime() {
+	public LocalTime getTime() {
 		return time;
 	}
 
-	public void setTime(String time) {
+	public void setTime(LocalTime time) {
 		this.time = time;
 	}
 
