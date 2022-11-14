@@ -13,23 +13,22 @@ import javax.validation.constraints.FutureOrPresent;
 
 import org.hibernate.annotations.GenericGenerator;
 
-
 @Entity
 @Table(name = "TB_TASKS")
 public class TaskModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(generator="uuid")
-	@GenericGenerator(name="uuid", strategy = "uuid2")
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	private String id;
-	
+
 	@Column(nullable = false, unique = false, length = 100)
 	private String title;
 
 	@Column(nullable = true, unique = false, length = 360)
 	private String description;
-	
+
 	@FutureOrPresent
 	@Column(nullable = false, unique = false, length = 20)
 	private LocalDate date;
@@ -43,7 +42,6 @@ public class TaskModel implements Serializable {
 	public TaskModel() {
 
 	}
-	
 
 	public TaskModel(String id, String title, String description, LocalDate date, LocalTime time, boolean state) {
 		super();
@@ -53,6 +51,13 @@ public class TaskModel implements Serializable {
 		this.date = date;
 		this.time = time;
 		this.state = state;
+	}
+
+	public TaskModel(String title, String description, LocalDate date, LocalTime time) {
+		this.title = title;
+		this.description = description;
+		this.date = date;
+
 	}
 
 	public String getId() {
