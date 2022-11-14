@@ -1,7 +1,5 @@
 package com.api.tasks.dtos;
 
-import java.util.Optional;
-
 import com.api.tasks.Utils.TaskUtils;
 import com.api.tasks.models.TaskModel;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -75,16 +73,7 @@ public class TaskDtoResponse {
 
 	public static TaskDtoResponse changeToDtoResponse(TaskModel task) {
 
-		return new TaskDtoResponse(task.getId(), task.getTitle(), task.getDescription(),TaskUtils.LocalDateToString(task.getDate()), task.getTime(), task.getState());
-
+		return new TaskDtoResponse(task.getId(), task.getTitle(), task.getDescription(),
+				TaskUtils.LocalDateToString(task.getDate()), task.getTime(), task.getState());
 	}
-
-	public static TaskDtoResponse changeOptionalTaskToDtoResponse(Optional<TaskModel> optionalTask) {
-
-		return new TaskDtoResponse(optionalTask.get().getId(), optionalTask.get().getTitle(),
-				optionalTask.get().getDescription(), TaskUtils.LocalDateToString(optionalTask.get().getDate()),
-				optionalTask.get().getTime(), optionalTask.get().getState());
-
-	}
-
 }

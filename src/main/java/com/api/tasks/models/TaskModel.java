@@ -55,6 +55,7 @@ public class TaskModel implements Serializable {
 		this.title = title;
 		this.description = description;
 		this.date = date;
+		this.time = time;
 
 	}
 

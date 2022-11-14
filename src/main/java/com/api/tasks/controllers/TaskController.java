@@ -53,10 +53,8 @@ public class TaskController {
 		if (taskModelOptional.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tarefa não encontrada.");
 		}
-
 		Optional<TaskDtoResponse> dtoResp = taskModelOptional
 				.map(taskModel -> TaskDtoResponse.changeToDtoResponse(taskModel));
-
 		return ResponseEntity.status(HttpStatus.OK).body(dtoResp);
 	}
 
