@@ -25,26 +25,9 @@ public class TaskService {
 	public Optional<TaskModel> findById(String id) {		
 		return taskRepository.findById(id);
 	}
-
-	@Transactional
-	public TaskModel save(TaskModel objTask) {
-		return taskRepository.save(objTask);
-	}
-
-	public TaskModel update(String id, TaskModel objTask) {
-
-		TaskModel taskEntity = taskRepository.getReferenceById(id);
-		updateData(taskEntity, objTask);
-		return taskRepository.save(taskEntity);
-	}
-
-	private void updateData(TaskModel entity, TaskModel objTask) {
-
-		entity.setTitle(objTask.getTitle());
-		entity.setDescription(objTask.getDescription());
-		entity.setDate(objTask.getDate());
-		entity.setTime(objTask.getTime());
-		entity.setState(objTask.getState());
+	
+	public TaskModel save(TaskModel task) {
+		return taskRepository.save(task);
 	}
 
 	@Transactional

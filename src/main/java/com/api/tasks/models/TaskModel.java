@@ -2,7 +2,6 @@ package com.api.tasks.models;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,16 +33,15 @@ public class TaskModel implements Serializable {
 	private LocalDate date;
 
 	@Column(nullable = true, unique = false, length = 10)
-	private LocalTime time;
+	private String time;
 
 	@Column(nullable = false, unique = false)
 	private boolean state;
 
 	public TaskModel() {
-
 	}
 
-	public TaskModel(String id, String title, String description, LocalDate date, LocalTime time, boolean state) {
+	public TaskModel(String id, String title, String description, LocalDate date, String time, boolean state) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -53,7 +51,7 @@ public class TaskModel implements Serializable {
 		this.state = state;
 	}
 
-	public TaskModel(String title, String description, LocalDate date, LocalTime time) {
+	public TaskModel(String title, String description, LocalDate date, String time) {
 		this.title = title;
 		this.description = description;
 		this.date = date;
@@ -92,11 +90,11 @@ public class TaskModel implements Serializable {
 		this.date = date;
 	}
 
-	public LocalTime getTime() {
+	public String getTime() {
 		return time;
 	}
 
-	public void setTime(LocalTime time) {
+	public void setTime(String time) {
 		this.time = time;
 	}
 

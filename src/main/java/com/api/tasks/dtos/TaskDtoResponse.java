@@ -1,23 +1,22 @@
 package com.api.tasks.dtos;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+import com.api.tasks.Utils.TaskUtils;
 import com.api.tasks.models.TaskModel;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class TaskDtoResponse {
 
 	private String id;
 	private String title;
 	private String description;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyy")
 	private String date;
 	private String time;
 	private boolean state;
 
 	public TaskDtoResponse(String id, String title, String description, String date, String time, boolean state) {
-		super();
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -66,7 +65,7 @@ public class TaskDtoResponse {
 		this.time = time;
 	}
 
-	public boolean isState() {
+	public boolean getState() {
 		return state;
 	}
 
@@ -76,27 +75,16 @@ public class TaskDtoResponse {
 
 	public static TaskDtoResponse changeToDtoResponse(TaskModel task) {
 
-		return new TaskDtoResponse(task.getId(), task.getTitle(), task.getDescription(),
-				LocalDateToString(task.getDate()), LocalTimeToString(task.getTime()), task.getState());
+		return new TaskDtoResponse(task.getId(), task.getTitle(), task.getDescription(),TaskUtils.LocalDateToString(task.getDate()), task.getTime(), task.getState());
 
 	}
 
 	public static TaskDtoResponse changeOptionalTaskToDtoResponse(Optional<TaskModel> optionalTask) {
-				
-		return new TaskDtoResponse(optionalTask.get().getId(), optionalTask.get().getTitle(), optionalTask.get().getDescription(),
-				LocalDateToString(optionalTask.get().getDate()), LocalTimeToString(optionalTask.get().getTime()), optionalTask.get().getState());
+
+		return new TaskDtoResponse(optionalTask.get().getId(), optionalTask.get().getTitle(),
+				optionalTask.get().getDescription(), TaskUtils.LocalDateToString(optionalTask.get().getDate()),
+				optionalTask.get().getTime(), optionalTask.get().getState());
 
 	}
-	
-	public static String LocalDateToString(LocalDate date) {
 
-		DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		return date.format(formatDate);
-	}
-	
-	public static String LocalTimeToString(LocalTime time) {
-
-		DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm");								
-		return time.format(formatTime);
-	}
 }

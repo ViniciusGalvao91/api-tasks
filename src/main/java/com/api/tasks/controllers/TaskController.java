@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.api.tasks.Utils.TaskUtils;
 import com.api.tasks.dtos.TaskDto;
 import com.api.tasks.dtos.TaskDtoResponse;
 import com.api.tasks.models.TaskModel;
@@ -34,52 +36,47 @@ public class TaskController {
 	@Autowired
 	private TaskService taskservices;
 
-	@PostMapping
-	public ResponseEntity<TaskDtoResponse> saveTask(@RequestBody @Valid TaskDto taskDto) {
-		if (taskDto.getState() == true) {
-			taskDto.setState(false);
-		}
-		var taskModel = new TaskModel();
-		taskModel = taskDto.changeToTask();
-
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(TaskDtoResponse.changeToDtoResponse(taskservices.save(taskModel)));
-	}
-
 	@GetMapping
 	public ResponseEntity<Object> getAllTasks(
 			@PageableDefault(page = 0, size = 10, sort = "date", direction = Sort.Direction.ASC) Pageable pageable) {
-
 		Page<TaskModel> taskModelPage = taskservices.findAll(pageable);
 		if (taskModelPage.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhuma tarefa encontrada!");
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(taskModelPage);
+		Page<TaskDtoResponse> dtoResp = taskModelPage.map(taskModel -> TaskDtoResponse.changeToDtoResponse(taskModel));
+		return ResponseEntity.status(HttpStatus.OK).body(dtoResp);
 	}
 
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<Object> getOneTask(@PathVariable String id) {
 		Optional<TaskModel> taskModelOptional = taskservices.findById(id);
-		if (!taskModelOptional.isPresent()) {
+		if (taskModelOptional.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tarefa não encontrada.");
 		}
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(TaskDtoResponse.changeOptionalTaskToDtoResponse(taskModelOptional));
+
+		Optional<TaskDtoResponse> dtoResp = taskModelOptional
+				.map(taskModel -> TaskDtoResponse.changeToDtoResponse(taskModel));
+
+		return ResponseEntity.status(HttpStatus.OK).body(dtoResp);
+	}
+
+	@PostMapping
+	public ResponseEntity<TaskDtoResponse> saveTask(@RequestBody @Valid TaskDto taskDto) {
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(TaskDtoResponse.changeToDtoResponse(taskservices.save(taskDto.changeToTask())));
 	}
 
 	@PutMapping(path = "/{id}")
 	public ResponseEntity<Object> updateTask(@PathVariable String id, @RequestBody @Valid TaskDto taskDto) {
 		Optional<TaskModel> taskModelOptional = taskservices.findById(id);
-		if (!taskModelOptional.isPresent()) {
+		if (taskModelOptional.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tarefa não encontrada.");
 		}
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(TaskDtoResponse.changeOptionalTaskToDtoResponse(taskModelOptional));
-	}
 
-	@PutMapping(path = "/state/{id}")
-	public ResponseEntity<TaskModel> updateState(@PathVariable String id, @RequestBody TaskModel objTask) {
-		return ResponseEntity.status(HttpStatus.OK).body(taskservices.update(id, objTask));
+		BeanUtils.copyProperties(taskDto, taskModelOptional.get());
+		taskModelOptional.get().setDate(TaskUtils.stringToLocalDate(taskDto.getDate()));
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(TaskDtoResponse.changeToDtoResponse(taskservices.save(taskModelOptional.get())));
 	}
 
 	@DeleteMapping(path = "/{id}")

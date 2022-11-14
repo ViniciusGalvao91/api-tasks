@@ -1,12 +1,9 @@
 package com.api.tasks.dtos;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.api.tasks.Utils.TaskUtils;
 import com.api.tasks.models.TaskModel;
 
 public class TaskDto {
@@ -25,7 +22,7 @@ public class TaskDto {
 
 	private String time;
 	
-	private boolean state;
+	private boolean state = false;
 
 	public String getTitle() {
 		return title;
@@ -69,18 +66,6 @@ public class TaskDto {
 
 	public TaskModel changeToTask() {
 
-		return new TaskModel(title, description, stringToLocalDate(date), stringToLocalTime(time));
-	}
-
-	public LocalDate stringToLocalDate(String date) {
-
-		DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		return LocalDate.parse(date, formatDate);
-	}
-	
-	public LocalTime stringToLocalTime(String time) {
-
-		DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm");								
-		return LocalTime.parse(time, formatTime);
+		return new TaskModel(title, description, TaskUtils.stringToLocalDate(date), time);
 	}
 }
