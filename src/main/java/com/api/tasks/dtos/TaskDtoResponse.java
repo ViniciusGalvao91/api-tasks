@@ -13,14 +13,14 @@ public class TaskDtoResponse {
 	private String date;
 	private String time;
 	private boolean state;
-
-	public TaskDtoResponse(String id, String title, String description, String date, String time, boolean state) {
-		this.id = id;
-		this.title = title;
-		this.description = description;
-		this.date = date;
-		this.time = time;
-		this.state = state;
+	
+	public TaskDtoResponse(TaskModel task) {
+		id = task.getId();
+		title = task.getTitle();
+		description = task.getDescription();
+		date = TaskUtils.LocalDateToString(task.getDate());
+		time = TaskUtils.LocalTimeToString(task.getTime());
+		state = task.getState();
 	}
 
 	public String getId() {
@@ -69,11 +69,5 @@ public class TaskDtoResponse {
 
 	public void setState(boolean state) {
 		this.state = state;
-	}
-
-	public static TaskDtoResponse changeToDtoResponse(TaskModel task) {
-
-		return new TaskDtoResponse(task.getId(), task.getTitle(), task.getDescription(),
-				TaskUtils.LocalDateToString(task.getDate()), task.getTime(), task.getState());
 	}
 }

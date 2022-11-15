@@ -1,12 +1,15 @@
 package com.api.tasks.dtos;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.api.tasks.Utils.TaskUtils;
 import com.api.tasks.models.TaskModel;
 
-public class TaskDto {
+public class TaskDto implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@NotBlank
 	@Size(max = 100)
@@ -19,10 +22,19 @@ public class TaskDto {
 	@NotBlank
 	@Size(max = 10)
 	private String date;
-
 	private String time;
-	
 	private boolean state = false;
+
+	public TaskDto() {
+	}
+
+	public TaskDto(TaskModel task) {
+		title = task.getTitle();
+		description = task.getDescription();
+		date = TaskUtils.LocalDateToString(task.getDate());
+		time = TaskUtils.LocalTimeToString(task.getTime());
+		state = task.getState();
+	}
 
 	public String getTitle() {
 		return title;
@@ -55,7 +67,7 @@ public class TaskDto {
 	public void setTime(String time) {
 		this.time = time;
 	}
-	
+
 	public boolean getState() {
 		return state;
 	}
@@ -66,6 +78,6 @@ public class TaskDto {
 
 	public TaskModel changeToTask() {
 
-		return new TaskModel(title, description, TaskUtils.stringToLocalDate(date), time);
+		return new TaskModel(title, description, TaskUtils.stringToLocalDate(date), TaskUtils.stringToLocalTime(time));
 	}
 }

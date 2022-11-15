@@ -12,22 +12,22 @@ public class TaskUtils {
 		return LocalDate.parse(date, formatDate);
 	}
 
-	public static LocalTime stringToLocalTime(String time) {
-
-		DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm:ss");
-		return LocalTime.parse(time, formatTime);
-	}
-
 	public static String LocalDateToString(LocalDate date) {
 
 		DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		return date.format(formatDate);
 	}
+	
+	public static LocalTime stringToLocalTime(String time) {
+		
+		return LocalTime.parse(time);
+	}
 
 	public static String LocalTimeToString(LocalTime time) {
 
-		DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm:ss");
-		return time.format(formatTime);
+		DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:MM");
+		return time.toString().formatted(formatTime);
+		
+		
 	}
-
 }

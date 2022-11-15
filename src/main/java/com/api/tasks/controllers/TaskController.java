@@ -1,5 +1,6 @@
 package com.api.tasks.controllers;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -43,7 +44,7 @@ public class TaskController {
 		if (taskModelPage.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Nenhuma tarefa encontrada!");
 		}
-		Page<TaskDtoResponse> dtoResp = taskModelPage.map(taskModel -> TaskDtoResponse.changeToDtoResponse(taskModel));
+		Page<TaskDtoResponse> dtoResp = taskModelPage.map(taskModel -> new TaskDtoResponse(taskModel));
 		return ResponseEntity.status(HttpStatus.OK).body(dtoResp);
 	}
 
@@ -53,15 +54,18 @@ public class TaskController {
 		if (taskModelOptional.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tarefa não encontrada.");
 		}
-		Optional<TaskDtoResponse> dtoResp = taskModelOptional
-				.map(taskModel -> TaskDtoResponse.changeToDtoResponse(taskModel));
+		Optional<TaskDtoResponse> dtoResp = taskModelOptional.map(taskModel -> new TaskDtoResponse(taskModel));
 		return ResponseEntity.status(HttpStatus.OK).body(dtoResp);
 	}
 
 	@PostMapping
-	public ResponseEntity<TaskDtoResponse> saveTask(@RequestBody @Valid TaskDto taskDto) {
+	public ResponseEntity<Object> saveTask(@RequestBody @Valid TaskDto taskDto) {
+		if (TaskUtils.stringToLocalDate(taskDto.getDate()).compareTo(LocalDate.now()) < 0) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("A data da tarefa precisa ser a data atual ou futura!");
+		}
 		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(TaskDtoResponse.changeToDtoResponse(taskservices.save(taskDto.changeToTask())));
+				.body(new TaskDtoResponse(taskservices.save(taskDto.changeToTask())));
 	}
 
 	@PutMapping(path = "/{id}")
@@ -69,12 +73,15 @@ public class TaskController {
 		Optional<TaskModel> taskModelOptional = taskservices.findById(id);
 		if (taskModelOptional.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tarefa não encontrada.");
+		} else if (TaskUtils.stringToLocalDate(taskDto.getDate()).compareTo(LocalDate.now()) < 0) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("A data da tarefa precisa ser a data atual ou futura!");
 		}
-
 		BeanUtils.copyProperties(taskDto, taskModelOptional.get());
 		taskModelOptional.get().setDate(TaskUtils.stringToLocalDate(taskDto.getDate()));
+		taskModelOptional.get().setTime(TaskUtils.stringToLocalTime(taskDto.getTime()));
 		return ResponseEntity.status(HttpStatus.OK)
-				.body(TaskDtoResponse.changeToDtoResponse(taskservices.save(taskModelOptional.get())));
+				.body(new TaskDtoResponse(taskservices.save(taskModelOptional.get())));
 	}
 
 	@DeleteMapping(path = "/{id}")
