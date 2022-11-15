@@ -54,7 +54,7 @@ Exemplo:
 
 {
     "id": "95461cf1-9e88-4845-a230-9450d519e8ce",
-    "title": "Entrega do tarefa IMPA ",
+    "title": "Entrega da tarefa IMPA ",
     "description": "Projeto para o processo seletivo de Desenvolvedor Java Junior",
     "date": "15/11/2022",
     "time": "18:00",
