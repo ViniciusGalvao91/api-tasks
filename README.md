@@ -6,7 +6,6 @@ API para gestão de tarefas.
   - Spring Boot
   - MySql
 
-
 # Instalação
 Clone repository
 
@@ -16,32 +15,25 @@ $ git clone https://github.com/ViniciusGalvao91/api-tasks.git
 
 CREATE DATABASE api_tasks;
 
-Usuário: root
-Senha:
-
 # Criação de novas tarefas
 Envie uma solicitação POST com 'title', 'description', 'date' e 'time' para o seguinte endpoint:
 
 /tasks/create
-
 
 # Alteração de tarefas
 Envie uma solicitação PUT com 'title', 'description', 'date', 'time' e 'state' para o seguinte endpoint:
 
 /tasks/update/{id}
 
-
 # Exclusão de tarefas
 Envie uma solicitação DELETE com 'id' para o seguinte endpoint:
 
 /delete/{id}
 
-
 # Listando tarefas
 Envie uma solicitação GET para o seguinte endpoint:
 
 /tasks
-
 
 # Pesquisando tarefas
 Envie uma solicitação GET com o 'id' para o seguinte endpoint:
