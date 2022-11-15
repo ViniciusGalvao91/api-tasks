@@ -48,7 +48,7 @@ public class TaskController {
 		return ResponseEntity.status(HttpStatus.OK).body(dtoResp);
 	}
 
-	@GetMapping(path = "/{id}")
+	@GetMapping(path = "/search/{id}")
 	public ResponseEntity<Object> getOneTask(@PathVariable String id) {
 		Optional<TaskModel> taskModelOptional = taskservices.findById(id);
 		if (taskModelOptional.isEmpty()) {
@@ -58,7 +58,7 @@ public class TaskController {
 		return ResponseEntity.status(HttpStatus.OK).body(dtoResp);
 	}
 
-	@PostMapping
+	@PostMapping(path = "/create")
 	public ResponseEntity<Object> saveTask(@RequestBody @Valid TaskDto taskDto) {
 		if (TaskUtils.stringToLocalDate(taskDto.getDate()).compareTo(LocalDate.now()) < 0) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -68,7 +68,7 @@ public class TaskController {
 				.body(new TaskDtoResponse(taskservices.save(taskDto.changeToTask())));
 	}
 
-	@PutMapping(path = "/{id}")
+	@PutMapping(path = "/update/{id}")
 	public ResponseEntity<Object> updateTask(@PathVariable String id, @RequestBody @Valid TaskDto taskDto) {
 		Optional<TaskModel> taskModelOptional = taskservices.findById(id);
 		if (taskModelOptional.isEmpty()) {
@@ -84,7 +84,7 @@ public class TaskController {
 				.body(new TaskDtoResponse(taskservices.save(taskModelOptional.get())));
 	}
 
-	@DeleteMapping(path = "/{id}")
+	@DeleteMapping(path = "/delete/{id}")
 	public ResponseEntity<Object> deleteTask(@PathVariable String id) {
 		Optional<TaskModel> taskModelOptional = taskservices.findById(id);
 		if (!taskModelOptional.isPresent()) {
