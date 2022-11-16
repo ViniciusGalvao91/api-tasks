@@ -28,7 +28,7 @@ Envie uma solicitação PUT com 'title', 'description', 'date', 'time' e 'state'
 # Exclusão de tarefas
 Envie uma solicitação DELETE com 'id' para o seguinte endpoint:
 
-/delete/{id}
+/tasks/delete/{id}
 
 # Listando tarefas
 Envie uma solicitação GET para o seguinte endpoint:
